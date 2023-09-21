@@ -63,15 +63,14 @@ class ViewController: UIViewController,
     
     // Exercise 1: Assign the result of MushroomGenerator.maybeGenerateMushroomPowerup()
     // to a variable. Print something if it's not nil
-      let powerup = MushroomGenerator.maybeGenerateMushroomPowerup()
-      if powerup != nil {
-          print("Got a powerup!")
-      } else {
-          print("Didn't get a powerup")
-      }
-    
-    // Exercise 2: Use the powerup on Mario using the useMushroomPowerupOnMario function
-    // ...
+    if let powerup = MushroomGenerator.maybeGenerateMushroomPowerup() {
+        print("Got a powerup!")
+        // Exercise 2: Use the powerup on Mario using the useMushroomPowerupOnMario function
+        useMushroomPowerupOnMario(powerup: powerup)
+    } else {
+        print("Didn't get a powerup")
+    }
+        
   }
   
   private func useMushroomPowerupOnMario(powerup: MushroomPowerup) {
@@ -87,7 +86,31 @@ class ViewController: UIViewController,
   
   // Exercise 3: Decipher the mystery box and apply the correct effect on mario
   private func decipher(mysteryBox: MysteryBox) {
-    
+    // Attempt to cast "mysteryEffect" to a Dictionary with a key of type String and value of type String
+    // Assign the result to the variable "effectDictionary"
+    guard let effectDictionary = mysteryBox.mysteryEffect as? [String: String] else {
+      // If the cast fails, then throw an error and early return
+      assertionFailure("Expecting value of type dictionary")
+      return
+    }
+    // Make sure the effectDictionary["effect"] has a non-nil value
+    // and assign the result to the "effect" variable
+    guard let effect = effectDictionary["effect"] else {
+      // If the value is nil, throw an error and early return
+      assertionFailure("Expecting value of type String")
+      return
+    }
+    // Apply the correct effect to Mario
+    if effect == "translate" {
+      translate(kart: kartView1, by: view.bounds.width)
+    } else if effect == "rotate" {
+      rotate(kart: kartView1)
+    } else if effect == "scale" {
+      scale(kart: kartView1)
+    } else {
+      assertionFailure("Unexpected effect")
+    }
+    print(mysteryBox.mysteryEffect)
   }
   
   private func translate(kart: UIView?,
